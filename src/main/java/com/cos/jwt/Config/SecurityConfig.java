@@ -15,14 +15,16 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CorsConfig corsConfig;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CorsFilter corsFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class);
 
         // csrf 비활성화
         http.csrf(AbstractHttpConfigurer::disable);
@@ -32,7 +34,6 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 x
                 .formLogin(AbstractHttpConfigurer::disable) // 폼로그인 사용 안함
                 .httpBasic(AbstractHttpConfigurer::disable) // httpBasic 사용 안함
-                // .addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class)
                 .addFilter(corsConfig.corsFilter()) // @CrossOrigin(인증 x), 시큐리티 필터에 등록 인증(o) --> 모든 요청을 허용
 
                 /* --------- security 최신 버전에서는 권한 적용시 ROLE_ 쓰지 않음. 즉, USER, ADMIN, MANAGER로 써야함 ---------- */
