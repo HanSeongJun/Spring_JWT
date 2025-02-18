@@ -15,26 +15,25 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CorsConfig corsConfig;
 
-//    @Bean // authenticationManager를 IOC에 등록
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
+    @Bean // authenticationManager를 IOC에 등록
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
         http.addFilterBefore(new MyFilter3(), SecurityContextPersistenceFilter.class);
 
         // csrf 비활성화
         http.csrf(AbstractHttpConfigurer::disable);
 
-        AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         http
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 x

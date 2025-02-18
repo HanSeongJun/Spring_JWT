@@ -1,6 +1,7 @@
 package com.cos.jwt.Config.auth;
 
 import com.cos.jwt.Model.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.Collection;
 
 // 스프링 시큐리티에서 사용자의 인증 정보를 담는 역할을 하는 UserDetails 인터페이스의 구현체
 // 즉, 스프링 시큐리티가 사용자 정보를 조회할 때 사용하는 Principal 객체
+@Data
 public class PrincipalDetails implements UserDetails {
     // UserDetails 인터페이스를 구현하여, 스프링 시큐리티의 인증 시스템에서 사용자 정보를 관리할 수 있도록 한다.
     // 스프링 시큐리티는 내부적으로 UserDetails 객체를 사용하여 사용자의 인증 상태를 확인한다.
